@@ -57,18 +57,22 @@ const start = async () =>{
         }
 
     })
-    bot.on('callback_query',msg=>{
+    bot.on('callback_query',async msg=>{
         const data = msg.data;
         const chatId = msg.message.chat.id
         if(data === '/again'){
            return startGame(chatId)
         }
-        if(data === chats[chatId].toString() ){
-            return bot.sendMessage(chatId,`Congratulations,you guessed number ${chats[chatId]}`,againOptions)
+        const user = await UserModel.findOne({chatId})
+        if(data == chats[chatId].toString() ){
+            user.right += 1
+            await bot.sendMessage(chatId,`Congratulations,you guessed number ${chats[chatId]}`,againOptions)
         }
-        else{
-            return bot.sendMessage(chatId,`Unfortunately you did not guess ,but guessed number ${chats[chatId]}`,againOptions)
+        else {
+            user.wrong += 1
+            await bot.sendMessage(chatId,`Unfortunately you did not guess ,but guessed number ${chats[chatId]}`,againOptions)
         }
+        await user.save()
     })
 
 }
