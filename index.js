@@ -3,6 +3,7 @@ const telegramApi = require('node-telegram-bot-api')
 const { gameOptions,againOptions } = require('./options.js')
 const sequelize = require('./db')
 const UserModel = require('./models')
+const User = require("./models");
 const bot = new telegramApi( process.env.TELEGRAM_TOKEN,{ polling:true } )
 
 const chats = {}
@@ -52,7 +53,9 @@ const start = async () =>{
                 }
             }
             if(text === '/info'){
-                const existingUser = await UserModel.findOne({ where: { chatId: chatId.toString() } });
+                const existingUser = await User.findOne({
+                    where: { chatId: chatId.toString() }
+                })
                 if (!existingUser) {
                     await UserModel.create({ chatId });
                 }
