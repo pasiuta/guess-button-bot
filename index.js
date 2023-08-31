@@ -43,10 +43,6 @@ const start = async () =>{
                     where: { chatId: chatId.toString() }
                 });
 
-                console.log(user,'user')
-                console.log('-----')
-                console.log(created,'created')
-                console.log('-----')
 
                 if (created) {
                     await bot.sendSticker(chatId, `https://stickerswiki.ams3.cdn.digitaloceanspaces.com/hena_monkey/6646255.160.webp`);
@@ -56,7 +52,7 @@ const start = async () =>{
                 }
             }
             if(text === '/info'){
-                const existingUser = await UserModel.findOne({ where: { chatId } });
+                const existingUser = await UserModel.findOne({ where: { chatId: chatId.toString() } });
                 if (!existingUser) {
                     await UserModel.create({ chatId });
                 }
