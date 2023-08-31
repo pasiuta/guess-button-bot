@@ -40,8 +40,9 @@ const start = async () =>{
         try {
             if (text === '/start') {
                 const [user, created] = await UserModel.findOrCreate({
-                    where: { chatId: chatId }
+                    where: { chatId: chatId.toString() }
                 });
+
                 console.log(user,'user')
                 console.log('-----')
                 console.log(created,'created')
