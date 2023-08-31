@@ -39,12 +39,16 @@ const start = async () =>{
 
         try {
             if(text === '/start'){
+                console.log('1')
                 await UserModel.create({chatId})
                 await bot.sendSticker(chatId,`https://stickerswiki.ams3.cdn.digitaloceanspaces.com/hena_monkey/6646255.160.webp`)
                 return  bot.sendMessage(chatId,`Welcome to the guess button bot `)
             }
             if(text === '/info'){
-                const user = await UserModel.findOne({chatId})
+                const existingUser = await UserModel.findOne({ where: { chatId } });
+                if (!existingUser) {
+                    await UserModel.create({ chatId });
+                }
                 return bot.sendMessage(chatId,`Your full name is ${msg.from.first_name} ${msg.from.last_name},  you have right answers: ${user.right}, wrong answers: ${user.wrong}`)
             }
             if(text === '/game'){
@@ -53,6 +57,7 @@ const start = async () =>{
             return bot.sendMessage(chatId,`I don't understand you,please try one more time!`)
         }
         catch (e){
+            console.error('Error:', e);
             return bot.sendMessage(chatId,'Something went wrong:(')
         }
 
