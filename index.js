@@ -59,7 +59,7 @@ const start = async () =>{
                 if (!existingUser) {
                     await UserModel.create({ chatId });
                 }
-                return bot.sendMessage(chatId,`Your full name is ${msg.from.first_name} ${msg.from.last_name},  you have right answers: ${user.right}, wrong answers: ${user.wrong}`)
+                return bot.sendMessage(chatId,`Your full name is ${msg.from.first_name} ${msg.from.last_name},  you have right answers: ${existingUser.right}, wrong answers: ${existingUser.wrong}`)
             }
             if(text === '/game'){
                 return startGame(chatId)
