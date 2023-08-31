@@ -38,11 +38,21 @@ const start = async () =>{
         const chatId = msg.chat.id
 
         try {
-            if(text === '/start'){
-                console.log('1')
-                await UserModel.create({chatId})
-                await bot.sendSticker(chatId,`https://stickerswiki.ams3.cdn.digitaloceanspaces.com/hena_monkey/6646255.160.webp`)
-                return  bot.sendMessage(chatId,`Welcome to the guess button bot `)
+            if (text === '/start') {
+                const [user, created] = await UserModel.findOrCreate({
+                    where: { chatId: chatId }
+                });
+                console.log(user,'user')
+                console.log('-----')
+                console.log(created,'created')
+                console.log('-----')
+
+                if (created) {
+                    await bot.sendSticker(chatId, `https://stickerswiki.ams3.cdn.digitaloceanspaces.com/hena_monkey/6646255.160.webp`);
+                    return bot.sendMessage(chatId, `Welcome to the guess button bot `);
+                } else {
+                    return bot.sendMessage(chatId, `Welcome back!`);
+                }
             }
             if(text === '/info'){
                 const existingUser = await UserModel.findOne({ where: { chatId } });
